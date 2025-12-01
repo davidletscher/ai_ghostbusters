@@ -84,10 +84,23 @@ class Ghostbusters:
 			if self._graphics:
 				self._graphics.drawObservations((self._pacman.getState().location.x, self._pacman.getState().location.y), observations)
 			
+			if self._timeDelay <= -2:
+				input('Hit enter to continue')
+			
 			# Move Pacman and check if any ghosts are caught
 			self._agent._startTime = time.time()
 			self._agent.findMove(observations)
 			action = self._agent.getMove()
+			
+			self._pacman.move(action)
+			
+			print(f'Pacman at {self._pacman.getState().location}, moving {action}')
+			
+			if self._graphics:
+				self._graphics.movePacman(self._pacman.getState().location)
+			
+			if self._timeDelay <= -2:
+				input('Hit enter to continue')
 			
 			if self._informationLevel >= 1:
 				print('Predicted ghost types:')
@@ -121,12 +134,9 @@ class Ghostbusters:
 				if self._graphics:
 					self._graphics.updateGhostPositions(allDistributions)
 			
-			print(f'Pacman at {self._pacman.getState().location}, moving {action}')
 			
-			self._pacman.move(action)
-			
-			if self._graphics:
-				self._graphics.movePacman(self._pacman.getState().location)
+			if self._timeDelay <= -2:
+				input('Hit enter to continue')
 			
 			for ghostId, ghost in enumerate(self._ghosts):
 				if ghost.alive and ghost.location == self._pacman.getState().location:
@@ -159,6 +169,9 @@ class Ghostbusters:
 					print(f'Ghost {ghostId} ran into Pacman')
 				else:
 					self._agent.ghostNotCaught(ghostId)
+					
+			if self._timeDelay <= -2:
+				input('Hit enter to continue')
 			
 			# Update scores
 			gameOver = True
@@ -175,7 +188,10 @@ class Ghostbusters:
 			if self._graphics:
 				self._graphics.updateScoreAndTurn(score, turn)
 				
-			time.sleep(self._timeDelay)
+			if self._timeDelay >= 0:
+				time.sleep(self._timeDelay)
+			else:
+				input('Hit enter to continue')
 		
 		if self._graphics:
 			self._graphics.movePacman(self._pacman.getState().location)
