@@ -27,16 +27,16 @@ class MyAgent(BaseAgent):
 		# update your predictions here
 		
 		# Find the direction to head that makes its average distance to the
-		# ghosts as small as possible.
+		# closest ghost as small as possible.
 		bestValue = float('inf')
 		for direction, newLocation in self._pacman.possibleMoves().items():
-			avgDistance = 0.
 			for ghostId in range(self._numGhosts):
+				avgDistance = 0.
 				for loc, p in self.ghostPositionDistribution(ghostId).items():
 					avgDistance += p * self._board.pathDistance(newLocation, loc)
-			if avgDistance < bestValue:
-				bestValue = avgDistance
-				self.setMove(direction)
+				if avgDistance < bestValue:
+					bestValue = avgDistance
+					self.setMove(direction)
 		
 	def ghostCaught(self, ghostId: int) -> None:
 		"""
